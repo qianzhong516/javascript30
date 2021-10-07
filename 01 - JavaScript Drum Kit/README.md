@@ -1,6 +1,6 @@
 # JS Drum Kit
 
-### Issue found
+### Issues found
 If consistently hit one key, the `playing` class won't be removed as it should be, so the key always stays highlighted.
 
 ### Thoughts
