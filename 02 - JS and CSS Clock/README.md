@@ -9,7 +9,7 @@
     `getSeconds()` only returns 0 - 59. When the number switches from 59 to 0, the `second-hand` will spin for an extra circle to roll back to the initial 90 degrees. The other cause is the `transition`, because we have set up the animation, that's why this mistake is now visible.
 
 ### Thoughts
-1. The solution for this one is simple. The longest should be at the top in the html and so on so forth. All we need to do is just to change the order of HTML code.
+1. The solution for this one is simple. The longest hand should be at the top in the html file and so on so forth. All we need to do is just to change the order of HTML code.
 2. Let's continue using `second-hand` as an example. To make the degrees continuous, each time the `seconds` becomes `0`, increase the total degrees by `360`.
 
 ### Extended Features
