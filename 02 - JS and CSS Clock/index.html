@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS + CSS Clock</title>
+</head>
+<body>
+
+
+    <div class="clock">
+      <div class="clock-face">
+        <div class="hand second-hand"></div>
+        <div class="hand min-hand"></div>
+        <div class="hand hour-hand"></div>
+      </div>
+    </div>
+
+
+  <style>
+    html {
+      background: #018DED url(https://unsplash.it/1500/1000?image=881&blur=5);
+      background-size: cover;
+      font-family: 'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-size: 2rem;
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 30rem;
+      height: 30rem;
+      border: 20px solid #D8A7B1;
+      border-radius: 50%;
+      margin: 50px auto;
+      position: relative;
+      padding: 2rem;
+      box-shadow:
+        0 0 0 4px rgba(0,0,0,0.1),
+        inset 0 0 0 3px #EFEFEF,
+        inset 0 0 10px black,
+        0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: translateY(-3px); /* account for the height of the clock hands */
+    }
+
+    .hand {
+      width: 50%;
+      height: 6px;
+      background: black;
+      position: absolute;
+      top: 50%;
+      transform-origin: 100%;
+      transition: all .05s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+    }
+
+    .second-hand {
+      width: 50%;
+      background: #FAE8E0;
+    }
+
+    .hour-hand {
+      width: 30%;
+      background: #EF7C8E;
+    }
+
+    .min-hand {
+      width: 40%;
+      background: #B6E2D3;
+    }
+
+  </style>
+
+  <script>
+    let baseSr = 90,
+        baseMr = 90,
+        baseHr = 90;
+
+    function convertNowToTime(cb) {
+      let now, hours, minutes, seconds;
+      now = new Date();
+      hours = now.getHours();
+      minutes = now.getMinutes();
+      seconds = now.getSeconds();
+      console.log(hours, minutes, seconds);
+      cb(hours, minutes, seconds);
+    }
+
+    function displayTime(hours, minutes, seconds) {
+      const hourHand = document.querySelector('.hour-hand'),
+            minHand = document.querySelector('.min-hand'),
+            secondHand = document.querySelector('.second-hand');
+      let sr, mr, hr;
+
+      if(seconds === 0) baseSr += 360;
+      if(minutes === 0) baseMr += 360;
+      if(hours === 0) baseHr += 360;
+
+      sr = seconds * 6 + baseSr;
+      secondHand.style.transform = `rotate(${sr}deg)`;
+      mr = minutes * 6 + baseMr;
+      minHand.style.transform = `translateX(calc(15rem * 0.2)) rotate(${mr}deg)`;
+      hr = (hours - 12) * 30 + baseHr;
+      hourHand.style.transform = `translateX(calc(15rem * 0.4)) rotate(${hr}deg)`;
+    }
+
+    convertNowToTime(displayTime);
+
+    setInterval(() => {
+      convertNowToTime(displayTime);
+    }, 1000);
+
+  </script>
+</body>
+</html>
