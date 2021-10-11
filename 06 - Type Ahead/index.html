@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+
+const input = document.querySelector('.search');
+const suggestions = document.querySelector('.suggestions');
+let data, currLat, currLon;
+
+function fetchData() {
+  const url = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  fetch(url)
+  .then(res => res.json())
+  .then(json => data = json);
+}
+
+function findMatch(value) {
+  let pattern = new RegExp(value, 'ig');
+  return data.filter(place => place.city.match(pattern) || place.state.match(pattern));
+}
+
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function degreesToRadians(degrees) {
+  return degrees * Math.PI / 180;
+}
+
+function distanceBetweenCoords(lat1, lon1, lat2, lon2) {
+  var earthRadiusKm = 6371;
+
+  var dLat = degreesToRadians(lat2-lat1);
+  var dLon = degreesToRadians(lon2-lon1);
+
+  lat1 = degreesToRadians(lat1);
+  lat2 = degreesToRadians(lat2);
+
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  return earthRadiusKm * c;
+}
+
+function getCurrentLocation() {
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      currLat = pos.coords.latitude;
+      currLon = pos.coords.longitude;
+    });
+  }else {
+    alert('Geolocation service is not supported in this browser.');
+  }
+}
+
+function sortByDistance(arr) {
+  arr.sort((a, b) => distanceBetweenCoords(currLat, currLon, a.latitude, a.longitude) - distanceBetweenCoords(currLat, currLon, b.latitude, b.longitude)
+  );
+}
+
+function handleInputChange() {
+  let inputVal = this.value.trim();
+  let pattern = new RegExp(inputVal, 'ig');
+  let results = findMatch(inputVal);
+  sortByDistance(results);
+
+  suggestions.innerHTML = '';
+
+  results.forEach(item => {
+    let li = document.createElement('li');
+    let cityName = item.city.replace(pattern, `<span class='hl'>${inputVal}</span>`);
+    let stateName = item.state.replace(pattern, `<span class='hl'>${inputVal}</span>`);
+
+    li.innerHTML = `
+      <span class='name'>${cityName}, ${stateName}</span>
+      <span class='population'>${numberWithCommas(item.population)}</span>
+    `;
+    
+    suggestions.append(li);
+  });
+}
+
+fetchData();
+getCurrentLocation();
+input.addEventListener('keyup', handleInputChange);
+
+</script>
+</body>
+</html>
