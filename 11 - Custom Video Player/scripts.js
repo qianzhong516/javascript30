@@ -1,3 +1,4 @@
+const player = document.querySelector('.player');
 const video = document.querySelector('.player__video');
 const playBtn = document.querySelector('.player__button');
 const playbackRateInput = document.querySelector('input[name=playbackRate]');
@@ -5,6 +6,7 @@ const volumeInput = document.querySelector('input[name=volume]');
 const progressBarFilled = document.querySelector('.progress__filled');
 const progressBar = document.querySelector('.progress');
 const playerButtons = document.querySelectorAll('[data-skip]');
+const fullscreenBtn = document.querySelector('.fullscreen');
 
 progressBarFilled.style.flexBasis = 0;
 
@@ -61,4 +63,29 @@ progressBar.addEventListener('mousedown', () => mouseMove = true);
 progressBar.addEventListener('mousemove', e => mouseMove && scrub(e));
 progressBar.addEventListener('mouseup', () => mouseMove = false);
 progressBar.addEventListener('mouseleave', () => mouseMove = false);
+
+let fullscreen = false;
+function makeFullscreen() {
+    if(!fullscreen) {
+        player.style.width = window.innerWidth + 'px';
+        player.style.height = window.innerHeight + 'px';
+        this.innerHTML = '&minus;';
+    }else {
+        player.style.width = 'auto';
+        player.style.height = 'auto';
+        this.innerHTML = '&#x26F6;';
+    }
+
+    fullscreen = !fullscreen;
+}
+
+function adaptFullscreen() {
+    if(fullscreen) {
+        player.style.width = window.innerWidth + 'px';
+        player.style.height = window.innerHeight + 'px';
+    }
+}
+
+fullscreenBtn.addEventListener('click', makeFullscreen);
+window.addEventListener('resize', adaptFullscreen);
 
