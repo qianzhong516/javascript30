@@ -53,18 +53,30 @@
 					required
 				/>
 				<input type="submit" value="+ Add Item" />
-        <div>
-          <input type="button" data-action='checkAll' value='Check All' />
-          <input type="button" data-action='uncheckAll' value='Uncheck All' />
-          <input type="button" data-action='deleteAll' value='delete All' />
-        </div>
+				<div>
+					<input
+						type="button"
+						data-action="checkAll"
+						value="Check All"
+					/>
+					<input
+						type="button"
+						data-action="uncheckAll"
+						value="Uncheck All"
+					/>
+					<input
+						type="button"
+						data-action="deleteAll"
+						value="delete All"
+					/>
+				</div>
 			</form>
 		</div>
 
 		<script>
 			const addItems = document.querySelector('.add-items');
 			const itemsList = document.querySelector('.plates');
-      const actionBtns = document.querySelectorAll('[data-action]');
+			const actionBtns = document.querySelectorAll('[data-action]');
 
 			class ItemsStore {
 				constructor() {
@@ -85,26 +97,26 @@
 					localStorage.setItem('items', JSON.stringify(this.items));
 				}
 
-        checkAll() {
-          this.items.forEach(item => item.checked = true);
-          localStorage.setItem('items', JSON.stringify(this.items));
-        }
+				checkAll() {
+					this.items.forEach(item => (item.checked = true));
+					localStorage.setItem('items', JSON.stringify(this.items));
+				}
 
-        uncheckAll() {
-          this.items.forEach(item => item.checked = false);
-          localStorage.setItem('items', JSON.stringify(this.items));
-        }
+				uncheckAll() {
+					this.items.forEach(item => (item.checked = false));
+					localStorage.setItem('items', JSON.stringify(this.items));
+				}
 
-        deleteAll() {
-          this.items = [];
-          localStorage.setItem('items', '');
-        }
+				deleteAll() {
+					this.items = [];
+					localStorage.setItem('items', '');
+				}
 			}
 
 			const store = new ItemsStore();
 
 			function renderList() {
-        itemsList.innerHTML = '';
+				itemsList.innerHTML = '';
 				store.items.forEach((item, i) => {
 					itemsList.insertAdjacentHTML(
 						'beforeend',
@@ -130,13 +142,13 @@
 				);
 			}
 
-      actionBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-          const method = this.dataset.action;
-          store[method]();
-          renderList();
-        });
-      });
+			actionBtns.forEach(btn => {
+				btn.addEventListener('click', function () {
+					const method = this.dataset.action;
+					store[method]();
+					renderList();
+				});
+			});
 
 			// toggle checks
 			itemsList.addEventListener('click', function (e) {
