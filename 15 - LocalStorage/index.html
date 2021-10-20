@@ -121,11 +121,11 @@
 					itemsList.insertAdjacentHTML(
 						'beforeend',
 						`<li>
-                <input type='checkbox' data-index=${i} ${
-							item.checked ? 'checked' : ''
-						} id='item-${i}'/>
-                <label for='item-${i}'>${item.name}</label>
-              </li>`
+							<input type='checkbox' data-index=${i} ${
+										item.checked ? 'checked' : ''
+									} id='item-${i}'/>
+							<label for='item-${i}'>${item.name}</label>
+              			</li>`
 					);
 				});
 			}
@@ -136,9 +136,9 @@
 				itemsList.insertAdjacentHTML(
 					'beforeend',
 					`<li>
-            <input type='checkbox' data-index=${newIndex} id='item-${newIndex}'/>
-            <label for='item-${newIndex}'>${name}</label>
-          </li>`
+						<input type='checkbox' data-index=${newIndex} id='item-${newIndex}'/>
+						<label for='item-${newIndex}'>${name}</label>
+					</li>`
 				);
 			}
 
